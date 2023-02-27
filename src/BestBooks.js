@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import { Carousel } from 'react-bootstrap';
 
 class BestBooks extends React.Component {
   constructor(props) {
