@@ -105,7 +105,7 @@ class BestBooks extends React.Component {
                         }}
                       >
                         <h3>
-                          <i class="fas fa-search-plus">{book.title}</i>
+                          <i class="fas">{book.title}</i>
                         </h3>
                         <p className="m-0">{book.description}</p>
                         <p className="m-0">Status: {book.status}</p>
