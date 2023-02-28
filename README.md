@@ -74,41 +74,39 @@ Your instructor will supply you with a link to the Trello board for you to copy 
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
-<!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
+Books are life-changing. They have the power to enlighten, educate, entertain, heal, and help us grow. Throughout this module, you'll create a small app to track what books have impacted you, and what's recommended to read next.
 
 ## Getting Started
-<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+ 1. Download the templates
+ 2. Follows the instructions
 
 ## Architecture
-<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+We used javascript, css, html, MangoDB, react
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an example:
 
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
+27-02-2023 5:34pm - We added the foundation of the site by filling in the blank code with instructions, creating the carousel and setting up the server.
 
 ## Estimates
-<!-- See below -->
-
+lab 1 - 3h 20m
 ## Credit and Collaborations
-<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
-```
+Kawika - doing most of the backend work
 
 ## Time Estimates
 
 For each of the lab features, make an estimate of the time it will take you to complete the feature, and record your start and finish times for that feature:
 
-```markdown
-Name of feature: ________________________________
+markdown
+Name of feature: Carousel and various initial front end code, as well as connecting front to back
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 4h
 
-Start time: _____
+Start time: 2:17pm
 
-Finish time: _____
+Finish time: 5:37pm
 
-Actual time needed to complete: _____
-```
+Actual time needed to complete: 3h 20m
+
 
 Add this information to your README.
 
