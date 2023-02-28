@@ -1,12 +1,16 @@
-import React from 'react';
-import axios from 'axios';
-import { Carousel } from 'react-bootstrap';
+import React from "react";
+import axios from "axios";
+import placeHolderImage from "./placeHolder.png";
+import { Button, Carousel } from "react-bootstrap";
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       books: [],
+      description: [],
+      status: [],
+      title: [],
       error: null,
     };
   }
@@ -23,17 +27,22 @@ class BestBooks extends React.Component {
   //   );
   // };
 
-  handleSearch = async () => {
+  handleSearch = async (e) => {
     try {
-      let apiFetch = `${process.env.REACT_APP_SERVER}/books`;
+      e.preventDefault();
+
+      let apiFetch = `${process.env.REACT_APP_SERVER}books`;
 
       let response = await axios.get(apiFetch);
       this.setState({
-        books: response.data[0],
+        books: response.data,
+        description: response.data.description,
+        status: response.data.status,
+        title: response.data.title,
       });
     } catch (error) {
       this.setState({
-        error: console.log('error'),
+        error: console.log("error"),
       });
     }
   };
@@ -42,8 +51,16 @@ class BestBooks extends React.Component {
     /* TODO: render all the books in a Carousel */
     return (
       <>
+        {console.log(this.state)}
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-
+        <Button
+          onClick={this.handleSearch}
+          className="mainButton"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))",
+          }}
+        ></Button>
         {this.state.books.length ? (
           <>
             <p>Book Carousel coming soon</p>
@@ -51,43 +68,36 @@ class BestBooks extends React.Component {
               <Carousel.Item>
                 <img
                   className="d-block w-100"
-                  src="holder.js/800x400?text=First slide&bg=373940"
+                  src={placeHolderImage}
                   alt={this.state.books.description}
                 />
                 <Carousel.Caption>
-                  <h3>First slide label</h3>
-                  <p>
-                    Nulla vitae elit libero, a pharetra augue mollis interdum.
-                  </p>
+                  <h3>The Giver</h3>
+                  <p>{this.state.books.description}</p>
                 </Carousel.Caption>
               </Carousel.Item>
               <Carousel.Item>
                 <img
                   className="d-block w-100"
-                  src="holder.js/800x400?text=Second slide&bg=282c34"
-                  alt="Second slide"
+                  src={placeHolderImage}
+                  alt={this.state.books.description}
                 />
 
                 <Carousel.Caption>
-                  <h3>Second slide label</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </p>
+                  <h3>The Outsiders</h3>
+                  <p>{this.state.books.description}</p>
                 </Carousel.Caption>
               </Carousel.Item>
               <Carousel.Item>
                 <img
                   className="d-block w-100"
-                  src="holder.js/800x400?text=Third slide&bg=20232a"
-                  alt="Third slide"
+                  src={placeHolderImage}
+                  alt={this.state.books.description}
                 />
 
                 <Carousel.Caption>
-                  <h3>Third slide label</h3>
-                  <p>
-                    Praesent commodo cursus magna, vel scelerisque nisl
-                    consectetur.
-                  </p>
+                  <h3>Animal Farm</h3>
+                  <p>{this.state.books.description}</p>
                 </Carousel.Caption>
               </Carousel.Item>
             </Carousel>
