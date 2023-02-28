@@ -41,7 +41,14 @@ export default class BookFormModal extends Component {
   render() {
     return (
       <>
-        <Button onClick={this.handleShowModal} className="btn-lg mainButton">
+        <Button
+          onClick={this.handleShowModal}
+          className="btn-lg mainButton"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))",
+          }}
+        >
           Add New Book
         </Button>
         <Modal show={this.state.showModal} onHide={this.handleCloseModal}>

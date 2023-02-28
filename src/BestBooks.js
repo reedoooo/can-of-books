@@ -61,7 +61,7 @@ class BestBooks extends React.Component {
     return (
       <>
         <Container className="headerContainer">
-          <h2>My Essential Lifelong Learning & Formation Shelf</h2>
+          <h2>My Cool Guy Book Shelf</h2>
           {/* <Button
           onClick={this.showModal}
           className="btn-lg mainButton"
@@ -72,7 +72,7 @@ class BestBooks extends React.Component {
         >
         Add New Book
         </Button> */}
-          <Button
+          {/* <Button
             onClick={this.handleSearch}
             className="btn-lg mainButton"
             style={{
@@ -81,23 +81,37 @@ class BestBooks extends React.Component {
             }}
           >
             Search for Current Books
-          </Button>
+          </Button> */}
           {this.state.books.length ? (
             <>
-              <h3>Books</h3>
               <Carousel>
                 {this.state.books.map((book) => (
                   <Carousel.Item key={book._id}>
-                    <img
-                      className="d-block w-100"
-                      src={book.image || placeHolderImage}
-                      alt={book.title}
-                    />
-                    <Carousel.Caption>
-                      <h3>{book.title}</h3>
-                      <p>{book.description}</p>
-                      <p>Status: {book.status}</p>
-                    </Carousel.Caption>
+                    <div
+                      className="bg-image hover-overlay ripple shadow-1-strong rounded"
+                      data-mdb-ripple-color="light"
+                    >
+                      <img
+                        className="w-100"
+                        src={book.image || placeHolderImage}
+                        alt={book.title}
+                      />
+                      {/* <Carousel.Caption> */}
+                      <div
+                        className="overlay hover-overlay mask text-light d-flex justify-content-center flex-column text-center"
+                        data-mdb-ripple-color="light"
+                        style={{
+                          backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        }}
+                      >
+                        <h3>
+                          <i class="fas fa-search-plus">{book.title}</i>
+                        </h3>
+                        <p className="m-0">{book.description}</p>
+                        <p className="m-0">Status: {book.status}</p>
+                      </div>
+                    </div>
+                    {/* </Carousel.Caption> */}
                   </Carousel.Item>
                 ))}
               </Carousel>
