@@ -112,6 +112,7 @@ export default class DeleteBookModal extends Component {
                 Submit
               </Button>
             </Form>
+            
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleCloseModal}>

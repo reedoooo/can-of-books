@@ -1,62 +1,39 @@
-import React, { Component } from "react";
-import { Button, Form, FormText, Modal } from "react-bootstrap";
+import React from "react";
+import { Modal, Button, Form } from "react-bootstrap";
 
-export default class BookFormModal extends Component {
+class BookFormModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      book: props.book,
-      showModal: false,
+      title: "",
+      author: "",
+      description: "",
+      show: false,
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
-    this.handleShowModal = this.handleShowModal.bind(this);
   }
 
-  handleInputChange = (event) => {
+  handleChange = (event) => {
     const { name, value } = event.target;
-    this.setState((prevState) => ({
-      book: { ...prevState.book, [name]: value },
-      numNewBooks: prevState.book.numNewBooks + 1,
-    }));
+    this.setState({ [name]: value });
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { book } = this.state;
-
-    // TODO: Send new book data to server using axios or fetch
-    console.log("New Book:", book);
-    this.props.onAddNewBook({
-      _id: book._id,
-      newBooksAdded: book.numNewBooks + 1,
-      title: book.title,
-      description: book.description,
-      status: book.status,
-    });
-
-    this.handleCloseModal();
+    const { title, description, status } = this.state;
+    if (!title || !description || !status) {
+      return;
+    }
+    const newBook = { title, description, status };
+    this.props.onAddNewBook(newBook);
+    this.setState({ title: "", description: "", status: "" });
+    this.props.onHide();
   };
 
-  handleCloseModal() {
-    this.setState({
-      book: {
-        _id: "",
-        title: "",
-        description: "",
-        status: "",
-        numNewBooks: 0,
-      },
-      showModal: false,
-    });
-  }
-
-  handleShowModal() {
-    this.setState({ showModal: true });
-  }
+  handleShowModal = () => {
+    this.setState({ show: true });
+  };
 
   render() {
-    const { book } = this.state;
     return (
       <>
         <Button
@@ -69,59 +46,57 @@ export default class BookFormModal extends Component {
         >
           Add New Book
         </Button>
-        <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
+        <Modal
+          show={this.state.show}
+          onHide={() => this.setState({ show: false })}
+        >
           <Modal.Header closeButton>
-            <Modal.Title>Add New Book</Modal.Title>
+            <Modal.Title>Add a new book</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.handleSubmit}>
-              <Form.Group controlId="title">
+              <Form.Group controlId="formTitle">
                 <Form.Label>Title</Form.Label>
                 <Form.Control
                   type="text"
                   name="title"
+                  value={this.state.title}
+                  onChange={this.handleChange}
                   placeholder="Enter title"
-                  value={book.title}
-                  onChange={this.handleInputChange}
-                  required
                 />
               </Form.Group>
-              <Form.Group controlId="description">
+              <Form.Group controlId="formDescription">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   as="textarea"
                   name="description"
-                  rows={3}
+                  value={this.state.description}
+                  onChange={this.handleChange}
                   placeholder="Enter description"
-                  value={book.description}
-                  onChange={this.handleInputChange}
-                  required
                 />
               </Form.Group>
-              <Form.Group controlId="status">
+              <Form.Group controlId="formStatus">
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
                   name="status"
-                  value={book.status}
-                  onChange={this.handleInputChange}
-                  required
+                  value={this.state.status}
+                  onChange={this.handleChange}
+                  placeholder="Select status"
                 >
-                  <option value="">Select status</option>
-                  <option value="available">Available</option>
-                  <option value="unavailable">Unavailable</option>
+                  <option value="">Select Status</option>
+                  <option value="Read">Read</option>
+                  <option value="Reading">Reading</option>
+                  <option value="Want to Read">Want to Read</option>
                 </Form.Control>
               </Form.Group>
-              <FormText className="text-muted">
-                All fields are required.
-              </FormText>
-              <Button type="submit" variant="primary">
-                Submit
+              <Button variant="primary" type="submit">
+                Add
               </Button>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleCloseModal}>
+            <Button variant="secondary" onClick={this.props.onHide}>
               Close
             </Button>
           </Modal.Footer>
@@ -130,3 +105,5 @@ export default class BookFormModal extends Component {
     );
   }
 }
+
+export default BookFormModal;
