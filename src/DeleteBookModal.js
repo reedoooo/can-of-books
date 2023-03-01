@@ -1,44 +1,50 @@
 import React, { Component } from "react";
-// import PropTypes from "prop-types";
 import { Button, Form, FormText, Modal } from "react-bootstrap";
 
 export default class DeleteBookModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      _id: "",
+      book: props.book,
       showModal: false,
     };
   }
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
-    this.setState({
-      [name]: value,
-    });
+    this.setState((prevState) => ({
+      book: { ...prevState.book, [name]: value },
+    }));
   };
 
   handleShowModal = () => {
     this.setState({ showModal: true });
   };
 
-handleDeleteSubmit = (e) => {
-  e.preventDefault();
-    const bookId = this.state._id;
-  if (this.props.onDelete) {
-    this.props.onDelete(bookId);
-  }
-  this.handleCloseModal();
-};
+  handleDeleteSubmit = (e) => {
+    e.preventDefault();
+    const { book } = this.state;
+    if (this.props.onDelete) {
+      this.props.onDelete(book);
+    }
+    this.handleCloseModal();
+  };
 
   handleCloseModal = () => {
     this.setState({
-      _id: "",
+      book: {
+        _id: "",
+        title: "",
+        description: "",
+        status: "",
+      },
       showModal: false,
     });
   };
 
   render() {
+        const { book } = this.state;
+
     return (
       <>
         <Button
@@ -63,10 +69,41 @@ handleDeleteSubmit = (e) => {
                   type="text"
                   name="_id"
                   placeholder="Enter _id"
-                  value={this.state._id}
+                  value={book._id}
                   onChange={this.handleInputChange}
-                  required
                 />
+              </Form.Group>
+              <Form.Group controlId="title">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  placeholder="Enter title"
+                  value={book.title}
+                />
+              </Form.Group>
+              <Form.Group controlId="description">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  name="description"
+                  rows={3}
+                  placeholder="Enter description"
+                  value={book.description}
+                />
+              </Form.Group>
+              <Form.Group controlId="status">
+                <Form.Label>Status</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="status"
+                  value={book.status}
+                  onChange={this.handleInputChange}
+                >
+                  <option value="">Select status</option>
+                  <option value="available">Available</option>
+                  <option value="unavailable">Unavailable</option>
+                </Form.Control>
               </Form.Group>
               <FormText className="text-muted">
                 All fields are required.
