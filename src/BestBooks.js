@@ -159,6 +159,24 @@ class BestBooks extends React.Component {
   //   }
   // };
 
+  handleBookUpdate = (updatedBook) => {
+    axios
+      .put(
+        `${process.env.REACT_APP_SERVER}books/${updatedBook._id}`,
+        updatedBook
+      )
+      .then((response) => {
+        console.log(`Book with ID ${updatedBook._id} updated successfully`);
+        this.fetchBooks();
+      })
+      .catch((error) => {
+        console.error(
+          `Error updating book with ID ${updatedBook._id}: `,
+          error
+        );
+      });
+  };
+
   render() {
     const { searchResults } = this.state;
     console.log(this.state.books);
@@ -260,8 +278,9 @@ class BestBooks extends React.Component {
             onHide={() => this.setState({ showEditModal: false })}
             onEdit={this.editBook}
             errorMessage={this.state.errorMessage}
+            onBookUpdated={this.handleBookUpdate}
           />
-
+          {/* <BookList books={this.state.books} /> */}
           {/* <BookSearchModal
             show={this.state.showSearchModal}
             books={this.state.books}

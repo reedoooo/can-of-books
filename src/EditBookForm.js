@@ -9,6 +9,7 @@ class EditBookForm extends Component {
     this.state = {
       searchTerm: "",
       searchResults: [],
+      book: {},
       _id: this.props.book._id ?? "",
       title: this.props.book.title,
       description: this.props.book.description,
@@ -72,9 +73,9 @@ class EditBookForm extends Component {
     });
   };
 
-  handleBookUpdate = (updatedBook) => {
-    this.props.onBookUpdated(updatedBook);
-  };
+   handleBookUpdate = (updatedBook) => {
+     this.props.onBookUpdated(updatedBook);
+   };
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -98,7 +99,9 @@ class EditBookForm extends Component {
       )
       .then((response) => {
         console.log(`Book with ID ${updatedBook._id} updated successfully`);
-        this.props.onBookUpdated(response.data);
+        if (typeof this.props.onBookUpdated === "function") {
+          this.props.onBookUpdated(response.data);
+        }
       })
       .catch((error) => {
         console.error(
