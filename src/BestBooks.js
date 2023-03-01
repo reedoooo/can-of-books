@@ -199,7 +199,7 @@ class BestBooks extends React.Component {
           )}
           <BookFormModal
             show={this.state.showAddModal}
-            // onHide={this.handleCloseAddModal}
+            onHide={this.handleCloseAddModal}
             {...this.state}
             onAddNewBook={this.handleAddNewBook}
             newBooksAdded={this.state.newBooksAdded}
@@ -207,7 +207,7 @@ class BestBooks extends React.Component {
           />
           <DeleteBookModal
             show={this.state.showDeleteModal}
-            // onHide={this.handleCloseDeleteModal}
+            onHide={this.handleCloseDeleteModal}
             filteredBooks={this.state.filteredBooks}
             onDelete={this.handleDeleteBook}
             numDeletedBooks={this.state.numDeletedBooks}
