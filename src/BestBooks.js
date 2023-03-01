@@ -1,11 +1,11 @@
 import React from "react";
 import axios from "axios";
 import placeHolderImage from "./placeHolder.png";
-import { MDBInput } from "mdb-react-ui-kit";
+// import { MDBInput } from "mdb-react-ui-kit";
 import { Button, Carousel, Container, Modal } from "react-bootstrap";
 import BookFormModal from "./BookFormModal";
 import DeleteBookModal from "./DeleteBookModal";
-import BookSearchModal from "./BookSearchModal";
+// import BookSearchModal from "./BookSearchModal";
 import EditBookForm from "./EditBookForm";
 
 class BestBooks extends React.Component {
@@ -19,10 +19,10 @@ class BestBooks extends React.Component {
       showModal: false,
       books: [],
       book: {
-        _id: undefined,
-        title: undefined,
-        description: undefined,
-        status: undefined,
+        _id: this._id,
+        title: this.title,
+        description: this.description,
+        status: this.status,
         numNewBooks: 0,
       },
       newBooksAdded: 0,
@@ -248,24 +248,28 @@ class BestBooks extends React.Component {
             onDelete={this.deleteBook}
             errorMessage={this.state.errorMessage}
           />
-
           <EditBookForm
+            book={{
+              _id: this.state._id,
+              title: this.state.title,
+              description: this.state.description,
+              status: this.state.status,
+            }}
             show={this.state.showEditModal}
             books={this.state.books}
-            book={this.state.book}
             onHide={() => this.setState({ showEditModal: false })}
             onEdit={this.editBook}
             errorMessage={this.state.errorMessage}
           />
 
-          <BookSearchModal
+          {/* <BookSearchModal
             show={this.state.showSearchModal}
             books={this.state.books}
             book={this.state.book}
             onHide={() => this.setState({ showSearchModal: false })}
             onSearch={this.searchBooks}
             errorMessage={this.state.errorMessage}
-          />
+          /> */}
           {/* <div className="mt-3">
             <Button variant="primary" onClick={() => this.setState({ showAddModal: true })}>
               Add a Book
@@ -315,7 +319,7 @@ class BestBooks extends React.Component {
                 alignItems: "center",
               }}
             >
-              <MDBInput
+              {/* <MDBInput
                 wrapperClass="mb-4"
                 label="Search Books"
                 type="search"
@@ -326,7 +330,7 @@ class BestBooks extends React.Component {
                   Top: "50%",
                   Bottom: "50%",
                 }}
-              />
+              /> */}
               {searchResults.length > 0 && (
                 <ul className="search-dropdown">
                   {searchResults.map((result) => (
@@ -346,7 +350,7 @@ class BestBooks extends React.Component {
                 onChange={(e) => this.setState({ searchQuery: e.target.value })}
               /> */}
 
-              <Button
+              {/* <Button
                 type="submit"
                 className="ml-2"
                 // className="btn-lg mainButton"
@@ -358,7 +362,7 @@ class BestBooks extends React.Component {
                 }}
               >
                 Search
-              </Button>
+              </Button> */}
             </form>
             {this.state.filteredBooks.length > 0 && (
               <div className="mt-3">

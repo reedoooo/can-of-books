@@ -75,7 +75,7 @@ class BookFormModal extends React.Component {
                   placeholder="Enter description"
                 />
               </Form.Group>
-              <Form.Group controlId="formStatus">
+              <Form.Group >
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"

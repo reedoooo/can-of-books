@@ -9,7 +9,7 @@ class EditBookForm extends Component {
     this.state = {
       searchTerm: "",
       searchResults: [],
-      _id: this.props.book._id,
+      _id: this.props.book._id ?? "",
       title: this.props.book.title,
       description: this.props.book.description,
       status: this.props.book.status,
@@ -53,40 +53,42 @@ class EditBookForm extends Component {
       });
   };
 
-  handleSelect = (title) => {
+  //   handleSelect = (title) => {
+  //     this.setState({
+  //       title,
+  //       searchResults: [],
+  //     });
+  //   };
+
+  handleBookSelect = (book) => {
     this.setState({
-      title,
+      book: {
+        _id: book._id,
+        title: book.title,
+        description: book.description,
+        status: book.status,
+      },
       searchResults: [],
     });
   };
 
   handleBookUpdate = (updatedBook) => {
-    const index = this.state.books.findIndex(
-      (book) => book._id === updatedBook._id
-    );
-    const newBooks = [...this.state.books];
-    newBooks.splice(index, 1, updatedBook);
-    console.log(newBooks);
-    this.setState({
-      books: newBooks,
-    });
-
     this.props.onBookUpdated(updatedBook);
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!this.props.book._id) {
+    if (!this.state.book._id) {
       console.error("Book ID is undefined");
       return;
     }
 
     const updatedBook = {
-      _id: this.props.book._id,
-      title: this.state.title,
-      description: this.state.description,
-      status: this.state.status,
+      _id: this.state.book._id,
+      title: this.state.book.title,
+      description: this.state.book.description,
+      status: this.state.book.status,
     };
 
     axios
@@ -107,24 +109,22 @@ class EditBookForm extends Component {
   };
 
   handleShowModal = () => {
-    this.setState({ showModal: true });
+    this.setState({
+      showModal: true,
+      book: this.props.book,
+    });
   };
 
   handleCloseModal = () => {
     this.setState({
-      book: {
-        _id: "",
-        title: "",
-        description: "",
-        status: "",
-      },
+      book: this.props.book,
       showModal: false,
     });
   };
 
   render() {
     console.log(this.props.books);
-    console.log(this.state.searchResults[this.state._id]);
+    console.log(this.state.searchResults);
 
     return (
       <>
@@ -147,13 +147,33 @@ class EditBookForm extends Component {
             <Form onSubmit={this.handleSubmit}>
               <Form.Group controlId="formTitle">
                 <Form.Label>Title</Form.Label>
-                <Form.Control
+                {/* <Form.Control
                   type="text"
                   name="title"
                   value={this.state.title}
                   onChange={this.handleInputChange}
                   required
+                /> */}
+                <Form.Control
+                  type="text"
+                  placeholder="Search by title"
+                  name="searchTerm"
+                  value={this.state.searchTerm}
+                  onChange={this.handleSearchInputChange}
                 />
+                {this.state.searchResults.length > 0 && (
+                  <div className="search-results">
+                    {this.state.searchResults.map((book) => (
+                      <div
+                        key={book._id}
+                        className="search-result"
+                        onClick={() => this.handleBookSelect(book)}
+                      >
+                        {book.title}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </Form.Group>
               <Form.Group controlId="formDescription">
                 <Form.Label>Description</Form.Label>
@@ -184,7 +204,7 @@ class EditBookForm extends Component {
 
             <hr />
 
-            <Form.Group controlId="formSearch">
+            {/* <Form.Group controlId="formSearch">
               <Form.Label>Search Books</Form.Label>
               <Form.Control
                 type="text"
@@ -193,21 +213,7 @@ class EditBookForm extends Component {
                 value={this.state.searchTerm}
                 onChange={this.handleSearchInputChange}
               />
-            </Form.Group>
-
-            {this.state.searchResults.length > 0 && (
-              <div className="search-results">
-                {this.state.searchResults.map((book) => (
-                  <div
-                    key={book._id}
-                    className="search-result"
-                    onClick={() => this.handleSelect(book.title)}
-                  >
-                    {book.title}
-                  </div>
-                ))}
-              </div>
-            )}
+            </Form.Group> */}
           </Modal.Body>
         </Modal>
       </>
