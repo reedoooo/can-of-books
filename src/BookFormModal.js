@@ -5,10 +5,7 @@ export default class BookFormModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id_: "",
-      title: "",
-      description: "",
-      status: "",
+      book: props.book,
       showModal: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,40 +15,38 @@ export default class BookFormModal extends Component {
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState((prevState) => ({
+      book: { ...prevState.book, [name]: value },
+      numNewBooks: prevState.book.numNewBooks + 1,
+    }));
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { title, id_, description, status } = this.state;
-    const newBook = {
-      id_,
-      title,
-      description,
-      status,
-    };
+    const { book } = this.state;
 
-    const numNewBooks = this.props.newBooksAdded + 1;
     // TODO: Send new book data to server using axios or fetch
-    console.log("New Book:", newBook);
+    console.log("New Book:", book);
     this.props.onAddNewBook({
-      id_: this.state.id_,
-      newBooksAdded: numNewBooks,
-      title: this.state.title,
-      description: this.state.description,
-      status: this.state.status,
+      _id: book._id,
+      newBooksAdded: book.numNewBooks + 1,
+      title: book.title,
+      description: book.description,
+      status: book.status,
     });
+
     this.handleCloseModal();
   };
 
-  
-
   handleCloseModal() {
     this.setState({
-      id_: "",
-      title: "",
-      description: "",
-      status: "",
+      book: {
+        _id: "",
+        title: "",
+        description: "",
+        status: "",
+        numNewBooks: 0,
+      },
       showModal: false,
     });
   }
@@ -61,6 +56,7 @@ export default class BookFormModal extends Component {
   }
 
   render() {
+    const { book } = this.state;
     return (
       <>
         <Button
@@ -85,7 +81,7 @@ export default class BookFormModal extends Component {
                   type="text"
                   name="title"
                   placeholder="Enter title"
-                  value={this.state.title}
+                  value={book.title}
                   onChange={this.handleInputChange}
                   required
                 />
@@ -97,7 +93,7 @@ export default class BookFormModal extends Component {
                   name="description"
                   rows={3}
                   placeholder="Enter description"
-                  value={this.state.description}
+                  value={book.description}
                   onChange={this.handleInputChange}
                   required
                 />
@@ -107,7 +103,7 @@ export default class BookFormModal extends Component {
                 <Form.Control
                   as="select"
                   name="status"
-                  value={this.state.status}
+                  value={book.status}
                   onChange={this.handleInputChange}
                   required
                 >
@@ -134,7 +130,3 @@ export default class BookFormModal extends Component {
     );
   }
 }
-
-
-
-
