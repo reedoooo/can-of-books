@@ -88,7 +88,6 @@ class BestBooks extends React.Component {
       });
     }
   }
-
   handleAddNewBook = (newBook) => {
     axios
       .post("/api/books", newBook)
