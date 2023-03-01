@@ -3,30 +3,29 @@ import axios from "axios";
 import placeHolderImage from "./placeHolder.png";
 import { Button, Carousel, Container, Modal } from "react-bootstrap";
 import BookFormModal from "./BookFormModal";
-import DeleteBookModal from "./DeleteBookModal";
+// import { async } from "q";
+import EditBookModal from "./EditBookModal";
+
+class Book {
+  constructor(title, description, status) {
+    this.title = title;
+    this.description = description;
+    this.status = status;
+  }
+}
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showAddModal: false,
-      showDeleteModal: false,
-      showModal: false,
+      showEditModal: false,
+      showModal: true,
       books: [],
-      newBooksAdded: 0,
-      numDeletedBooks: 0,
-      errorMessage: "",
-      title: "",
-      _v: 0,
-      _id: "",
-      description: "",
-      status: "",
       error: null,
       filteredBooks: [],
       searchQuery: "",
     };
-
-    this.deleteBook = this.deleteBook.bind(this);
   }
 
   /* TODO: Make a GET request to your API to fetch all the books from the database */
@@ -34,9 +33,9 @@ class BestBooks extends React.Component {
     this.fetchBooks();
   }
 
-  async fetchBooks() {
+  fetchBooks = async() => {
     try {
-      let apiFetch = `${process.env.REACT_APP_SERVER}books`;
+      let apiFetch = `${process.env.REACT_APP_SERVER}/books`;
       let response = await axios.get(apiFetch);
       this.setState({
         books: response.data,
@@ -48,79 +47,28 @@ class BestBooks extends React.Component {
     }
   }
 
-  handleSearch = async (e) => {
-    e.preventDefault();
-    const { searchQuery } = this.state;
+  // handleSearch = async (e) => {
+  //   e.preventDefault();
+  //   const { searchQuery } = this.state;
 
-    try {
-      let apiFetch = `${process.env.REACT_APP_SERVER}books`;
-      let response = await axios.get(apiFetch);
+  //   try {
+  //     let apiFetch = `${process.env.REACT_APP_SERVER}books`;
+  //     let response = await axios.get(apiFetch);
 
-      let filteredBooks = response.data.filter((book) =>
-        book.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+  //     let filteredBooks = response.data.filter((book) =>
+  //       book.title.toLowerCase().includes(searchQuery.toLowerCase())
+  //     );
 
-      this.setState({
-        showModal: true,
-        filteredBooks: filteredBooks,
-      });
-    } catch (error) {
-      this.setState({
-        error: "Error occurred while searching books",
-      });
-    }
-  };
-
-  async deleteBook(bookId) {
-    try {
-      const apiDelete = `${process.env.REACT_APP_SERVER}books/${bookId}`;
-      await axios.delete(apiDelete);
-      console.log(`Book with ID ${bookId} deleted successfully`);
-      this.setState((prevState) => ({
-        books: prevState.books.filter((book) => book._id !== bookId),
-        numDeletedBooks: prevState.numDeletedBooks + 1,
-        errorMessage: "",
-      }));
-    } catch (error) {
-      console.error("Error occurred while deleting book: ", error);
-      this.setState({
-        errorMessage: "Error occurred while deleting book",
-      });
-    }
-  }
-  handleAddNewBook = (newBook) => {
-    axios
-      .post("/api/books", newBook)
-      .then((response) => {
-        console.log("Adding new book:", response.data);
-        this.setState((prevState) => ({
-          books: [...prevState.books, response.data],
-          newBooksAdded: prevState.newBooksAdded + 1,
-          errorMessage: "",
-        }));
-      })
-      .catch((error) => {
-        console.error("Error adding new book:", error);
-        this.setState({
-          errorMessage: "Error adding new book. Please try again later.",
-        });
-      });
-  };
-
-  handleAddNewBookError = (error) => {
-    console.log("Error adding new book:", error);
-    this.setState({ errorMessage: "Failed to add new book." });
-  };
-
-  handleDeleteBook = (book) => {
-    // console.log("Deleting Book:", book);
-    this.deleteBook(book._id);
-  };
-
-  handleDeleteBookError = (error) => {
-    console.log("Error adding new book:", error);
-    this.setState({ errorMessage: "Failed to delete book." });
-  };
+  //     this.setState({
+  //       showModal: true,
+  //       filteredBooks: filteredBooks,
+  //     });
+  //   } catch (error) {
+  //     this.setState({
+  //       error: "Error occurred while searching books",
+  //     });
+  //   }
+  // };
 
   handleCloseAddModal = () => {
     this.setState({
@@ -128,25 +76,64 @@ class BestBooks extends React.Component {
     });
   };
 
-  handleCloseDeleteModal = () => {
-    this.setState({
-      showDeleteModal: false,
-    });
-  };
   handleCloseModal = () => {
     this.setState({
       showModal: false,
     });
   };
 
+  handleDeleteBook = async (book) => {
+    try {
+      let apiUrl = `${process.env.REACT_APP_SERVER}/books/${book._id}`;
+      await axios.delete(apiUrl);
+      this.fetchBooks();
+    } catch (err){
+      console.error(err)
+    }
+  }
+
+  handleAddBook = (event) => {
+    let newBook = new Book(
+      event.target.title.value,
+      event.target.description.value,
+      event.target.status.value
+    )
+
+    console.log(newBook);
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER}/books`, newBook)
+      .then(response => {
+        console.log(response);
+        this.fetchBooks();
+      })
+      .catch(error => {console.log(error)})
+  };
+
+  handleEditBook = (event, book) => {
+    let newBook = new Book (
+      event.target.title.value,
+      event.target.description.value,
+      event.target.status.value
+    )
+
+    console.log(book);
+    console.log(newBook);
+
+    axios
+      .put(`${process.env.REACT_APP_SERVER}/books/${book._id}`, newBook)
+      .then(response => {console.log('put request successful ' + response)})
+      .catch(err => console.log(err + ' | put request failed' ))
+  }
+
+
   render() {
     return (
       <>
-        {console.log(this.state)}
         <Container className="headerContainer">
           <h2>My Cool Guy Book Shelf</h2>
 
-          {this.state.books.length ? (
+          {this.state.books.length > 0 ? (
             <>
               <Carousel>
                 {this.state.books.map((book) => (
@@ -173,6 +160,8 @@ class BestBooks extends React.Component {
                         </h3>
                         <p className="m-0">{book.description}</p>
                         <p className="m-0">Status: {book.status}</p>
+                        <button onClick={() => this.handleDeleteBook(book)}>Remove</button>
+                        <EditBookModal book={book} handleEditBook={(event, book) => this.handleEditBook(event, book)}/>
                       </div>
                     </div>
                     {/* </Carousel.Caption> */}
@@ -182,9 +171,10 @@ class BestBooks extends React.Component {
             </>
           ) : (
             <>
+              {/* this.state.showModal is false by default, needs to be set to true if you want modal to show up when no books are found */}
               <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
                 <Modal.Header closeButton>
-                  <Modal.Title>No Books Found :(</Modal.Title>
+                  <Modal.Title>No Books Found :</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <p>Sorry, no books were found for your search.</p>
@@ -197,22 +187,7 @@ class BestBooks extends React.Component {
               </Modal>
             </>
           )}
-          <BookFormModal
-            show={this.state.showAddModal}
-            onHide={this.handleCloseAddModal}
-            {...this.state}
-            onAddNewBook={this.handleAddNewBook}
-            newBooksAdded={this.state.newBooksAdded}
-            errorMessage={this.state.errorMessage}
-          />
-          <DeleteBookModal
-            show={this.state.showDeleteModal}
-            onHide={this.handleCloseDeleteModal}
-            filteredBooks={this.state.filteredBooks}
-            onDelete={this.handleDeleteBook}
-            numDeletedBooks={this.state.numDeletedBooks}
-            errorMessage={this.state.errorMessage}
-          />
+          <BookFormModal handleAddBook={this.handleAddBook}/>
         </Container>
       </>
     );
