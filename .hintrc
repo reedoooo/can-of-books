@@ -10,8 +10,9 @@
           "text-align: -webkit-match-parent",
           "-webkit-text-size-adjust",
           "background-clip",
-          "print-color-adjust",
-          "mask-size"
+          "color-adjust",
+          "mask-size",
+          "transition-*"
         ]
       }
     ]
