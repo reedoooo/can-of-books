@@ -36,3 +36,22 @@ img {
     width: 100%;
     text-align: center;
 }
+
+.search-results {
+    position: absolute;
+    z-index: 1;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.search-result {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.search-result:hover {
+    background-color: #f4f4f4;
+}

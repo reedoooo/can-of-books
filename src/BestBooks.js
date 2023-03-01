@@ -6,6 +6,7 @@ import { Button, Carousel, Container, Modal } from "react-bootstrap";
 import BookFormModal from "./BookFormModal";
 import DeleteBookModal from "./DeleteBookModal";
 import BookSearchModal from "./BookSearchModal";
+import EditBookForm from "./EditBookForm";
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class BestBooks extends React.Component {
       showAddModal: false,
       showDeleteModal: false,
       showSearchModal: false,
+      showEditModal: false,
       showModal: false,
       books: [],
       book: {
@@ -30,8 +32,8 @@ class BestBooks extends React.Component {
       searchResults: [],
       searchQuery: "",
     };
-    this.handleAutoComplete = this.handleAutoComplete.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
+    // this.handleAutoComplete = this.handleAutoComplete.bind(this);
+    // this.handleSelect = this.handleSelect.bind(this);
     this.deleteBook = this.deleteBook.bind(this);
   }
 
@@ -69,20 +71,20 @@ class BestBooks extends React.Component {
     }
   }
 
-  handleAutoComplete(event) {
-    const query = event.target.value.trim();
-    if (query === "") {
-      this.setState({ searchResults: [] });
-      return;
-    }
-    this.searchBooks(query);
-  }
+  // handleAutoComplete(event) {
+  //   const query = event.target.value.trim();
+  //   if (query === "") {
+  //     this.setState({ searchResults: [] });
+  //     return;
+  //   }
+  //   this.searchBooks(query);
+  // }
 
-  handleSelect(title) {
-    this.setState({ searchQuery: title, searchResults: [] }, () =>
-      this.searchBooks(title)
-    );
-  }
+  // handleSelect(title) {
+  //   this.setState({ searchQuery: title, searchResults: [] }, () =>
+  //     this.searchBooks(title)
+  //   );
+  // }
 
   async deleteBook(book) {
     try {
@@ -140,22 +142,22 @@ class BestBooks extends React.Component {
     });
   };
 
-  handleSearch = async (e) => {
-    e.preventDefault();
-    const { searchQuery } = this.state;
+  // handleSearch = async (e) => {
+  //   e.preventDefault();
+  //   const { searchQuery } = this.state;
 
-    try {
-      await this.searchBooks(searchQuery);
-      this.setState({
-        showModal: true,
-      });
-    } catch (error) {
-      console.error("Error occurred while searching books: ", error);
-      this.setState({
-        errorMessage: "Error occurred while searching books",
-      });
-    }
-  };
+  //   try {
+  //     await this.searchBooks(searchQuery);
+  //     this.setState({
+  //       showModal: true,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error occurred while searching books: ", error);
+  //     this.setState({
+  //       errorMessage: "Error occurred while searching books",
+  //     });
+  //   }
+  // };
 
   render() {
     const { searchResults } = this.state;
@@ -217,15 +219,6 @@ class BestBooks extends React.Component {
             </>
           )}
 
-          <BookFormModal
-            show={this.state.showAddModal}
-            books={this.state.books}
-            onHide={this.handleCloseAddModal}
-            onAddNewBook={this.handleAddNewBook}
-            handleShowModal={this.handleShowModal}
-            newBooksAdded={this.state.newBooksAdded}
-            errorMessage={this.state.errorMessage}
-          />
           {/* <Button
             onClick={this.handleShowModal}
             className="btn-lg mainButton"
@@ -237,12 +230,31 @@ class BestBooks extends React.Component {
             Add New Book
           </Button> */}
 
+          <BookFormModal
+            show={this.state.showAddModal}
+            books={this.state.books}
+            onHide={this.handleCloseAddModal}
+            onAddNewBook={this.handleAddNewBook}
+            handleShowModal={this.handleShowModal}
+            newBooksAdded={this.state.newBooksAdded}
+            errorMessage={this.state.errorMessage}
+          />
+
           <DeleteBookModal
             show={this.state.showDeleteModal}
             books={this.state.books}
             book={this.state.book}
             onHide={() => this.setState({ showDeleteModal: false })}
             onDelete={this.deleteBook}
+            errorMessage={this.state.errorMessage}
+          />
+
+          <EditBookForm
+            show={this.state.showEditModal}
+            books={this.state.books}
+            book={this.state.book}
+            onHide={() => this.setState({ showEditModal: false })}
+            onEdit={this.editBook}
             errorMessage={this.state.errorMessage}
           />
 
