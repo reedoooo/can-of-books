@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from './Header.js';
-import Footer from './Footer.js';
-import BestBooks from './BestBooks.js';
-import About from "./About.js";
+import Header from './Header';
+import Footer from './Footer';
+import BestBooks from './BestBooks';
+import About from "./About";
 import './app.css';
 import {
   BrowserRouter as Router,
