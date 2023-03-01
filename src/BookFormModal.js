@@ -5,10 +5,10 @@ export default class BookFormModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id_: "",
-      title: "",
-      description: "",
-      status: "",
+      _id: undefined,
+      title: null,
+      description: null,
+      status: null,
       showModal: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,9 +23,9 @@ export default class BookFormModal extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { title, id_, description, status } = this.state;
+    const { title, _id, description, status } = this.state;
     const newBook = {
-      id_,
+      _id,
       title,
       description,
       status,
@@ -35,7 +35,7 @@ export default class BookFormModal extends Component {
     // TODO: Send new book data to server using axios or fetch
     console.log("New Book:", newBook);
     this.props.onAddNewBook({
-      id_: this.state.id_,
+      _id: this.state._id,
       newBooksAdded: numNewBooks,
       title: this.state.title,
       description: this.state.description,
@@ -44,11 +44,9 @@ export default class BookFormModal extends Component {
     this.handleCloseModal();
   };
 
-  
-
   handleCloseModal() {
     this.setState({
-      id_: "",
+      _id: "",
       title: "",
       description: "",
       status: "",

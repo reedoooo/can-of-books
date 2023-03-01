@@ -16,12 +16,6 @@ class BestBooks extends React.Component {
       newBooksAdded: 0,
       numDeletedBooks: 0,
       errorMessage: "",
-      title: "",
-      _v: 0,
-      _id: "",
-      description: "",
-      status: "",
-      error: null,
       filteredBooks: [],
       searchQuery: "",
     };
@@ -88,9 +82,10 @@ class BestBooks extends React.Component {
       });
     }
   }
+
   handleAddNewBook = (newBook) => {
     axios
-      .post("/api/books", newBook)
+      .post(`${process.env.REACT_APP_SERVER}books`, newBook)
       .then((response) => {
         console.log("Adding new book:", response.data);
         this.setState((prevState) => ({
@@ -105,21 +100,6 @@ class BestBooks extends React.Component {
           errorMessage: "Error adding new book. Please try again later.",
         });
       });
-  };
-
-  handleAddNewBookError = (error) => {
-    console.log("Error adding new book:", error);
-    this.setState({ errorMessage: "Failed to add new book." });
-  };
-
-  handleDeleteBook = (book) => {
-    // console.log("Deleting Book:", book);
-    this.deleteBook(book._id);
-  };
-
-  handleDeleteBookError = (error) => {
-    console.log("Error adding new book:", error);
-    this.setState({ errorMessage: "Failed to delete book." });
   };
 
   handleCloseAddModal = () => {
@@ -142,10 +122,9 @@ class BestBooks extends React.Component {
   render() {
     return (
       <>
-        {console.log(this.state)}
+        {console.log(this.state.newBook)}
         <Container className="headerContainer">
           <h2>My Cool Guy Book Shelf</h2>
-
           {this.state.books.length ? (
             <>
               <Carousel>
@@ -160,7 +139,6 @@ class BestBooks extends React.Component {
                         src={book.image || placeHolderImage}
                         alt={book.title}
                       />
-                      {/* <Carousel.Caption> */}
                       <div
                         className="overlay hover-overlay mask text-light d-flex justify-content-center flex-column text-center"
                         data-mdb-ripple-color="light"
@@ -175,7 +153,6 @@ class BestBooks extends React.Component {
                         <p className="m-0">Status: {book.status}</p>
                       </div>
                     </div>
-                    {/* </Carousel.Caption> */}
                   </Carousel.Item>
                 ))}
               </Carousel>
@@ -197,22 +174,49 @@ class BestBooks extends React.Component {
               </Modal>
             </>
           )}
+
           <BookFormModal
             show={this.state.showAddModal}
             onHide={this.handleCloseAddModal}
-            {...this.state}
             onAddNewBook={this.handleAddNewBook}
             newBooksAdded={this.state.newBooksAdded}
             errorMessage={this.state.errorMessage}
           />
+
           <DeleteBookModal
             show={this.state.showDeleteModal}
-            onHide={this.handleCloseDeleteModal}
-            filteredBooks={this.state.filteredBooks}
-            onDelete={this.handleDeleteBook}
-            numDeletedBooks={this.state.numDeletedBooks}
+            books={this.state.books}
+            onHide={() => this.setState({ showDeleteModal: false })}
+            onDelete={this.deleteBook}
             errorMessage={this.state.errorMessage}
           />
+
+          <div className="mt-3">
+            {/* <Button
+              variant="primary"
+              onClick={() => this.setState({ showAddModal: true })}
+            >
+              Add a Book
+            </Button>
+            <Button
+              variant="danger"
+              className="ml-2"
+              onClick={() => this.setState({ showDeleteModal: true })}
+            >
+              Delete a Book
+            </Button> */}
+            <form onSubmit={this.handleSearch}>
+              <input
+                type="text"
+                placeholder="Search Books"
+                value={this.state.searchQuery}
+                onChange={(e) => this.setState({ searchQuery: e.target.value })}
+              />
+              <Button type="submit" className="ml-2">
+                Search
+              </Button>
+            </form>
+          </div>
         </Container>
       </>
     );

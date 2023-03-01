@@ -6,7 +6,7 @@ export default class DeleteBookModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "",
+      _id: "",
       showModal: false,
     };
   }
@@ -22,19 +22,18 @@ export default class DeleteBookModal extends Component {
     this.setState({ showModal: true });
   };
 
-  handleDeleteSubmit = (e) => {
-    e.preventDefault();
-    const bookId = this.state.id;
-    // if (this.props.onDelete) {
-      this.props.onDelete(bookId);
-    // }
-
-    this.handleCloseModal();
-  };
+handleDeleteSubmit = (e) => {
+  e.preventDefault();
+    const bookId = this.state._id;
+  if (this.props.onDelete) {
+    this.props.onDelete(bookId);
+  }
+  this.handleCloseModal();
+};
 
   handleCloseModal = () => {
     this.setState({
-      id: "",
+      _id: "",
       showModal: false,
     });
   };
@@ -58,13 +57,13 @@ export default class DeleteBookModal extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.handleDeleteSubmit}>
-              <Form.Group controlId="id">
-                <Form.Label>Book ID</Form.Label>
+              <Form.Group controlId="_id">
+                <Form.Label>Book _id</Form.Label>
                 <Form.Control
                   type="text"
-                  name="id"
-                  placeholder="Enter ID"
-                  value={this.state.id}
+                  name="_id"
+                  placeholder="Enter _id"
+                  value={this.state._id}
                   onChange={this.handleInputChange}
                   required
                 />
