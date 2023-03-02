@@ -23,9 +23,17 @@ class EditBookForm extends Component {
     const name = target.name;
     const value = target.value;
 
-    this.setState({
-      [name]: value,
-    });
+    if (name === "description") {
+      this.setState({
+        [name]: value,
+        prevDescription: this.state.description,
+        description: value,
+      });
+    } else {
+      this.setState({
+        [name]: value,
+      });
+    }
   };
 
   handleSearchInputChange = (event) => {
@@ -73,9 +81,9 @@ class EditBookForm extends Component {
     });
   };
 
-   handleBookUpdate = (updatedBook) => {
-     this.props.onBookUpdated(updatedBook);
-   };
+  handleBookUpdate = (updatedBook) => {
+    this.props.onBookUpdated(updatedBook);
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -88,7 +96,7 @@ class EditBookForm extends Component {
     const updatedBook = {
       _id: this.state.book._id,
       title: this.state.book.title,
-      description: this.state.book.description,
+      description: this.state.description,
       status: this.state.book.status,
     };
 
@@ -101,6 +109,22 @@ class EditBookForm extends Component {
         console.log(`Book with ID ${updatedBook._id} updated successfully`);
         if (typeof this.props.onBookUpdated === "function") {
           this.props.onBookUpdated(response.data);
+        }
+
+        if (this.state.prevDescription) {
+          axios
+            .delete(
+              `${process.env.REACT_APP_SERVER}books/${updatedBook._id}/description/${this.state.prevDescription}`
+            )
+            .then((response) => {
+              console.log(`Previous description deleted successfully`);
+            })
+            .catch((error) => {
+              console.error(
+                `Error deleting previous description of book with ID ${updatedBook._id}: `,
+                error
+              );
+            });
         }
       })
       .catch((error) => {
