@@ -77,8 +77,9 @@ class EditBookModal extends React.Component{
                   required
                 >
                   <option value="">Select status</option>
-                  <option value="available">Available</option>
-                  <option value="unavailable">Unavailable</option>
+                  <option value="Unread">Unread</option>
+                  <option value="Reading">Reading</option>
+                  <option value="Read">Read</option>
                 </Form.Control>
               </Form.Group>
 
