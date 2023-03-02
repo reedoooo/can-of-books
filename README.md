@@ -86,17 +86,20 @@ We used javascript, css, html, MangoDB, react
 ## Change Log
 
 27-02-2023 5:34pm - We added the foundation of the site by filling in the blank code with instructions, creating the carousel and setting up the server.
+28-02-2023 11:39pm - We added to the CSS and functionality of the site. We added an add and delete button. However, we were unable to finish the delete function.
+01-03-2023 6:44pm - We added to the CSS and functionality of the site. We added an add and delete button. However, we were unable to finish the delete function.
 
 ## Estimates
 lab 1 - 3h 20m
+lab 2 - 8h
+lab 3 - 8h
 ## Credit and Collaborations
 Kawika - doing most of the backend work
 
 ## Time Estimates
 
-For each of the lab features, make an estimate of the time it will take you to complete the feature, and record your start and finish times for that feature:
+### Lab 1
 
-markdown
 Name of feature: Carousel and various initial front end code, as well as connecting front to back
 
 Estimate of time needed to complete: 4h
@@ -106,6 +109,30 @@ Start time: 2:17pm
 Finish time: 5:37pm
 
 Actual time needed to complete: 3h 20m
+
+### Lab 2
+
+Name of feature: Add button and delete button as well as general CSS
+
+Estimate of time needed to complete: 2h
+
+Start time: 3:17pm
+
+Finish time: 11:41pm
+
+Actual time needed to complete: 9h 20m
+
+### Lab 3
+
+Name of feature: Modify Button
+
+Estimate of time needed to complete: 3h
+
+Start time: 10:17am
+
+Finish time: 8:00pm
+
+Actual time needed to complete: 10h 20m
 
 
 Add this information to your README.
