@@ -13,12 +13,13 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import LogInLogOut from './Auth/LogInLogOut';
 
 class App extends React.Component {
   render() {
     return (
       <>
-        <LoginPage />
+        <LogInLogOut />
 
         {this.props.auth0.isAuthenticated ? 
         
