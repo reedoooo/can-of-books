@@ -122,8 +122,12 @@ class BestBooks extends React.Component {
 
     axios
       .put(`${process.env.REACT_APP_SERVER}/books/${book._id}`, newBook)
-      .then(response => {console.log('put request successful ' + response)})
+      .then(response => {
+        console.log('put request successful ' + response);
+        this.fetchBooks();
+      })
       .catch(err => console.log(err + ' | put request failed' ))
+
   }
 
 
@@ -160,8 +164,8 @@ class BestBooks extends React.Component {
                         </h3>
                         <p className="m-0">{book.description}</p>
                         <p className="m-0">Status: {book.status}</p>
-                        <button onClick={() => this.handleDeleteBook(book)}>Remove</button>
-                        <EditBookModal book={book} handleEditBook={(event, book) => this.handleEditBook(event, book)}/>
+                        <Button onClick={() => this.handleDeleteBook(book)}>Remove</Button>
+                        <EditBookModal book={book} handleEditBook={(event, book) => this.handleEditBook(event, book)} fetchBooks={this.fetchBooks}/>
                       </div>
                     </div>
                     {/* </Carousel.Caption> */}
@@ -187,7 +191,7 @@ class BestBooks extends React.Component {
               </Modal>
             </>
           )}
-          <BookFormModal handleAddBook={this.handleAddBook}/>
+          <BookFormModal handleAddBook={this.handleAddBook} fetchBooks={this.fetchBooks}/>
         </Container>
       </>
     );

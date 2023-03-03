@@ -17,6 +17,7 @@ class BookFormModal extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.handleAddBook(event);
+    this.props.fetchBooks();
     this.handleCloseModal();
   }  
 
