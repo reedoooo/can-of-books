@@ -135,7 +135,7 @@ Finish time: 8:00pm
 
 Actual time needed to complete: 10h 20m
 
-### Lab 5
+### Lab 4
 
 Name of feature: Final Touches and Testing + login
 
