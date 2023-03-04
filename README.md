@@ -88,11 +88,12 @@ We used javascript, css, html, MangoDB, react
 27-02-2023 5:34pm - We added the foundation of the site by filling in the blank code with instructions, creating the carousel and setting up the server.
 28-02-2023 11:39pm - We added to the CSS and functionality of the site. We added an add and delete button. However, we were unable to finish the delete function.
 01-03-2023 6:44pm - We added to the CSS and functionality of the site. We added an add and delete button. However, we were unable to finish the delete function.
-
+03-03-23 7:33pm - Troubleshooted any bugs. Add login pagae and authenticator. Tested the code to ensure it is working properly
 ## Estimates
 lab 1 - 3h 20m
 lab 2 - 8h
-lab 3 - 8h
+lab 3 - 9h
+lab 4 - 9h
 ## Credit and Collaborations
 Kawika - doing most of the backend work
 
@@ -134,8 +135,17 @@ Finish time: 8:00pm
 
 Actual time needed to complete: 10h 20m
 
+### Lab 5
 
-Add this information to your README.
+Name of feature: Final Touches and Testing + login
+
+Estimate of time needed to complete: 4h
+
+Start time: 11:00am
+
+Finish time: 8:00pm
+
+Actual time needed to complete: 9h
 
 ## Submission Instructions
 
