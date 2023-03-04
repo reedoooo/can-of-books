@@ -1,7 +1,6 @@
 import React from "react";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Logout from "./Auth/Logout";
 
 class Header extends React.Component {
   render() {
@@ -20,9 +19,6 @@ class Header extends React.Component {
               <Link to="/about" className="nav-link">
                 About
               </Link>
-            </NavItem>
-            <NavItem>
-              <Logout />
             </NavItem>
           </Nav>
         </Navbar.Collapse>
