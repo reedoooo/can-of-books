@@ -1,46 +1,47 @@
 import React from "react";
 import { Button, Form, FormText, Modal } from "react-bootstrap";
 
-class EditBookModal extends React.Component {
-  constructor(props) {
+class EditBookModal extends React.Component{
+  constructor(props){
     super(props);
 
     this.state = {
       show: false,
       title: this.props.book.title,
       description: this.props.book.description,
-      status: this.props.book.status,
-    };
+      status: this.props.book.status
+    }
   }
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  };
+  }
 
   handleTitleInputChange = (event) => {
-    this.setState({ title: event.target.value });
-  };
+    this.setState({title: event.target.value})
+  }
 
   handleShowModal = () => {
-    this.setState({ show: !this.state.show });
-  };
+    this.setState({show: !this.state.show})
+  }
 
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.handleEditBook(event, this.props.book);
     this.handleShowModal();
-  };
+  }
 
-  render() {
-    return (
+  render(){
+    return(
       <>
-        <Button onClick={this.handleShowModal}>Edit</Button>
+        <Button onClick={this.handleShowModal} >Edit</Button>
 
-        <Modal show={this.state.show} onHide={this.handleShowModal}>
+        <Modal show={this.state.show} onHide={this.handleShowModal} >
           <Modal.Header closeButton>Edit Book</Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.handleSubmit}>
+
               <Form.Group controlId="title">
                 <Form.Label>Title</Form.Label>
                 <Form.Control
@@ -89,11 +90,12 @@ class EditBookModal extends React.Component {
               <Button type="submit" variant="primary">
                 Submit
               </Button>
+
             </Form>
           </Modal.Body>
         </Modal>
       </>
-    );
+    )
   }
 }
 

@@ -1,4 +1,4 @@
-@import '~mdb-ui-kit/css/mdb.min.css';
+/* @import '~mdb-ui-kit/css/mdb.min.css'; */
 
 .headerContainer {
     display: flex;
@@ -22,7 +22,6 @@ img {
     margin-top: 0;
     padding-top: 0;
 }
-
 .overlay {
     color: #fff;
     position: absolute;
@@ -35,23 +34,4 @@ img {
     height: 100%;
     width: 100%;
     text-align: center;
-}
-
-.search-results {
-    position: absolute;
-    z-index: 1;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    max-height: 200px;
-    overflow-y: auto;
-    width: 100%;
-}
-
-.search-result {
-    padding: 5px;
-    cursor: pointer;
-}
-
-.search-result:hover {
-    background-color: #f4f4f4;
 }
