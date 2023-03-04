@@ -1,37 +1,33 @@
-import React from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import React, { Component } from "react";
+import { Button, Form, FormText, Modal } from "react-bootstrap";
 
-class BookFormModal extends React.Component {
+class BookFormModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      author: "",
-      description: "",
-      show: false,
+      showModal: false,
     };
   }
 
-  handleChange = (event) => {
+  handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { title, description, status } = this.state;
-    if (!title || !description || !status) {
-      return;
-    }
-    const newBook = { title, description, status };
-    this.props.onAddNewBook(newBook);
-    this.setState({ title: "", description: "", status: "" });
-    this.props.onHide();
-  };
+    this.props.handleAddBook(event);
+    this.props.fetchBooks();
+    this.handleCloseModal();
+  }  
+
+  // handleCloseModal = () => {
+  //   this.setState({ showModal: false,});
+  // }
 
   handleShowModal = () => {
-    this.setState({ show: true });
-  };
+    this.setState({ showModal: !this.state.showModal });
+  }
 
   render() {
     return (
@@ -46,57 +42,59 @@ class BookFormModal extends React.Component {
         >
           Add New Book
         </Button>
-        <Modal
-          show={this.state.show}
-          onHide={() => this.setState({ show: false })}
-        >
+        <Modal show={this.state.showModal} onHide={this.handleShowModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Add a new book</Modal.Title>
+            <Modal.Title>Add New Book</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.handleSubmit}>
-              <Form.Group controlId="formTitle">
+              <Form.Group controlId="title">
                 <Form.Label>Title</Form.Label>
                 <Form.Control
                   type="text"
                   name="title"
-                  value={this.state.title}
-                  onChange={this.handleChange}
                   placeholder="Enter title"
+                  value={this.state.title}
+                  onChange={this.handleInputChange}
+                  required
                 />
               </Form.Group>
-              <Form.Group controlId="formDescription">
+              <Form.Group controlId="description">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   as="textarea"
                   name="description"
-                  value={this.state.description}
-                  onChange={this.handleChange}
+                  rows={3}
                   placeholder="Enter description"
+                  value={this.state.description}
+                  onChange={this.handleInputChange}
+                  required
                 />
               </Form.Group>
-              <Form.Group >
+              <Form.Group controlId="status">
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
                   name="status"
                   value={this.state.status}
-                  onChange={this.handleChange}
-                  placeholder="Select status"
+                  onChange={this.handleInputChange}
+                  required
                 >
-                  <option value="">Select Status</option>
-                  <option value="Read">Read</option>
-                  <option value="Reading">Reading</option>
-                  <option value="Want to Read">Want to Read</option>
+                  <option value="">Select status</option>
+                  <option value="available">Available</option>
+                  <option value="unavailable">Unavailable</option>
                 </Form.Control>
               </Form.Group>
-              <Button variant="primary" type="submit">
-                Add
+              <FormText className="text-muted">
+                All fields are required.
+              </FormText>
+              <Button type="submit" variant="primary">
+                Submit
               </Button>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.props.onHide}>
+            <Button variant="secondary" onClick={this.handleCloseModal}>
               Close
             </Button>
           </Modal.Footer>
@@ -105,5 +103,6 @@ class BookFormModal extends React.Component {
     );
   }
 }
+
 
 export default BookFormModal;
