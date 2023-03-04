@@ -1,12 +1,11 @@
 import React from "react";
 import axios from "axios";
 import placeHolderImage from "./placeHolder.png";
-// import { MDBInput } from "mdb-react-ui-kit";
+import { MDBInput } from "mdb-react-ui-kit";
 import { Button, Carousel, Container, Modal } from "react-bootstrap";
 import BookFormModal from "./BookFormModal";
 import DeleteBookModal from "./DeleteBookModal";
-// import BookSearchModal from "./BookSearchModal";
-import EditBookForm from "./EditBookForm";
+import BookSearchModal from "./BookSearchModal";
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -15,14 +14,13 @@ class BestBooks extends React.Component {
       showAddModal: false,
       showDeleteModal: false,
       showSearchModal: false,
-      showEditModal: false,
       showModal: false,
       books: [],
       book: {
-        _id: this._id,
-        title: this.title,
-        description: this.description,
-        status: this.status,
+        _id: undefined,
+        title: undefined,
+        description: undefined,
+        status: undefined,
         numNewBooks: 0,
       },
       newBooksAdded: 0,
@@ -32,8 +30,8 @@ class BestBooks extends React.Component {
       searchResults: [],
       searchQuery: "",
     };
-    // this.handleAutoComplete = this.handleAutoComplete.bind(this);
-    // this.handleSelect = this.handleSelect.bind(this);
+    this.handleAutoComplete = this.handleAutoComplete.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
     this.deleteBook = this.deleteBook.bind(this);
   }
 
@@ -56,6 +54,29 @@ class BestBooks extends React.Component {
     }
   }
 
+  // handleSearch = async (e) => {
+  //   e.preventDefault();
+  //   const { searchQuery } = this.state;
+
+  //   try {
+  //     let apiFetch = `${process.env.REACT_APP_SERVER}books/${searchQuery}`;
+  //     let response = await axios.get(apiFetch);
+  //     console.log("You're searching for:", searchQuery);
+
+  //     let filteredBooks = response.data.filter((book) =>
+  //       book.title.toLowerCase().includes(searchQuery.toLowerCase())
+  //     );
+
+  //     this.setState({
+  //       showSearchModal: true,
+  //       filteredBooks: filteredBooks,
+  //     });
+  //   } catch (error) {
+  //     this.setState({
+  //       error: "Error occurred while searching books",
+  //     });
+  //   }
+  // };
   async searchBooks(query) {
     try {
       let apiFetch = `${process.env.REACT_APP_SERVER}books/search?q=${query}`;
@@ -71,20 +92,20 @@ class BestBooks extends React.Component {
     }
   }
 
-  // handleAutoComplete(event) {
-  //   const query = event.target.value.trim();
-  //   if (query === "") {
-  //     this.setState({ searchResults: [] });
-  //     return;
-  //   }
-  //   this.searchBooks(query);
-  // }
+  handleAutoComplete(event) {
+    const query = event.target.value.trim();
+    if (query === "") {
+      this.setState({ searchResults: [] });
+      return;
+    }
+    this.searchBooks(query);
+  }
 
-  // handleSelect(title) {
-  //   this.setState({ searchQuery: title, searchResults: [] }, () =>
-  //     this.searchBooks(title)
-  //   );
-  // }
+  handleSelect(title) {
+    this.setState({ searchQuery: title, searchResults: [] }, () =>
+      this.searchBooks(title)
+    );
+  }
 
   async deleteBook(book) {
     try {
@@ -113,7 +134,7 @@ class BestBooks extends React.Component {
 
         this.setState((prevState) => ({
           books: [...prevState.books, response.data],
-          newBooksAdded: prevState.newBooksAdded + 1,
+          newBooksAdded: this.state + 1,
           errorMessage: "",
         }));
       })
@@ -142,39 +163,21 @@ class BestBooks extends React.Component {
     });
   };
 
-  // handleSearch = async (e) => {
-  //   e.preventDefault();
-  //   const { searchQuery } = this.state;
+  handleSearch = async (e) => {
+    e.preventDefault();
+    const { searchQuery } = this.state;
 
-  //   try {
-  //     await this.searchBooks(searchQuery);
-  //     this.setState({
-  //       showModal: true,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error occurred while searching books: ", error);
-  //     this.setState({
-  //       errorMessage: "Error occurred while searching books",
-  //     });
-  //   }
-  // };
-
-  handleBookUpdate = (updatedBook) => {
-    axios
-      .put(
-        `${process.env.REACT_APP_SERVER}books/${updatedBook._id}`,
-        updatedBook
-      )
-      .then((response) => {
-        console.log(`Book with ID ${updatedBook._id} updated successfully`);
-        this.fetchBooks();
-      })
-      .catch((error) => {
-        console.error(
-          `Error updating book with ID ${updatedBook._id}: `,
-          error
-        );
+    try {
+      await this.searchBooks(searchQuery);
+      this.setState({
+        showModal: true,
       });
+    } catch (error) {
+      console.error("Error occurred while searching books: ", error);
+      this.setState({
+        errorMessage: "Error occurred while searching books",
+      });
+    }
   };
 
   render() {
@@ -237,23 +240,12 @@ class BestBooks extends React.Component {
             </>
           )}
 
-          {/* <Button
-            onClick={this.handleShowModal}
-            className="btn-lg mainButton"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))",
-            }}
-          >
-            Add New Book
-          </Button> */}
-
           <BookFormModal
             show={this.state.showAddModal}
             books={this.state.books}
+            book={this.state.book}
             onHide={this.handleCloseAddModal}
             onAddNewBook={this.handleAddNewBook}
-            handleShowModal={this.handleShowModal}
             newBooksAdded={this.state.newBooksAdded}
             errorMessage={this.state.errorMessage}
           />
@@ -266,29 +258,15 @@ class BestBooks extends React.Component {
             onDelete={this.deleteBook}
             errorMessage={this.state.errorMessage}
           />
-          <EditBookForm
-            book={{
-              _id: this.state._id,
-              title: this.state.title,
-              description: this.state.description,
-              status: this.state.status,
-            }}
-            show={this.state.showEditModal}
-            books={this.state.books}
-            onHide={() => this.setState({ showEditModal: false })}
-            onEdit={this.editBook}
-            errorMessage={this.state.errorMessage}
-            onBookUpdated={this.handleBookUpdate}
-          />
-          {/* <BookList books={this.state.books} /> */}
-          {/* <BookSearchModal
+
+          <BookSearchModal
             show={this.state.showSearchModal}
             books={this.state.books}
             book={this.state.book}
             onHide={() => this.setState({ showSearchModal: false })}
-            onSearch={this.searchBooks}
+            onSearch={this.searchBook}
             errorMessage={this.state.errorMessage}
-          /> */}
+          />
           {/* <div className="mt-3">
             <Button variant="primary" onClick={() => this.setState({ showAddModal: true })}>
               Add a Book
@@ -338,7 +316,7 @@ class BestBooks extends React.Component {
                 alignItems: "center",
               }}
             >
-              {/* <MDBInput
+              <MDBInput
                 wrapperClass="mb-4"
                 label="Search Books"
                 type="search"
@@ -349,7 +327,7 @@ class BestBooks extends React.Component {
                   Top: "50%",
                   Bottom: "50%",
                 }}
-              /> */}
+              />
               {searchResults.length > 0 && (
                 <ul className="search-dropdown">
                   {searchResults.map((result) => (
@@ -368,8 +346,7 @@ class BestBooks extends React.Component {
                 value={this.state.searchQuery}
                 onChange={(e) => this.setState({ searchQuery: e.target.value })}
               /> */}
-
-              {/* <Button
+              <Button
                 type="submit"
                 className="ml-2"
                 // className="btn-lg mainButton"
@@ -381,7 +358,7 @@ class BestBooks extends React.Component {
                 }}
               >
                 Search
-              </Button> */}
+              </Button>
             </form>
             {this.state.filteredBooks.length > 0 && (
               <div className="mt-3">
@@ -408,3 +385,275 @@ class BestBooks extends React.Component {
 }
 
 export default BestBooks;
+import React, { Component } from "react";
+import { Button, Form, FormText, Modal } from "react-bootstrap";
+
+export default class BookFormModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      book: props.book,
+      showModal: false,
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleShowModal = this.handleShowModal.bind(this);
+  }
+
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
+    this.setState((prevState) => ({
+      book: { ...prevState.book, [name]: value },
+      numNewBooks: prevState.book.numNewBooks + 1,
+    }));
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const { book } = this.state;
+
+    // TODO: Send new book data to server using axios or fetch
+    console.log("New Book:", book);
+    this.props.onAddNewBook({
+      _id: book._id,
+      newBooksAdded: book.numNewBooks + 1,
+      title: book.title,
+      description: book.description,
+      status: book.status,
+    });
+
+    this.handleCloseModal();
+  };
+
+  handleCloseModal() {
+    this.setState({
+      book: {
+        _id: "",
+        title: "",
+        description: "",
+        status: "",
+        numNewBooks: 0,
+      },
+      showModal: false,
+    });
+  }
+
+  handleShowModal() {
+    this.setState({ showModal: true });
+  }
+
+  render() {
+    const { book } = this.state;
+    return (
+      <>
+        <Button
+          onClick={this.handleShowModal}
+          className="btn-lg mainButton"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))",
+          }}
+        >
+          Add New Book
+        </Button>
+        <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add New Book</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Group controlId="title">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  placeholder="Enter title"
+                  value={book.title}
+                  onChange={this.handleInputChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="description">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  name="description"
+                  rows={3}
+                  placeholder="Enter description"
+                  value={book.description}
+                  onChange={this.handleInputChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="status">
+                <Form.Label>Status</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="status"
+                  value={book.status}
+                  onChange={this.handleInputChange}
+                  required
+                >
+                  <option value="">Select status</option>
+                  <option value="available">Available</option>
+                  <option value="unavailable">Unavailable</option>
+                </Form.Control>
+              </Form.Group>
+              <FormText className="text-muted">
+                All fields are required.
+              </FormText>
+              <Button type="submit" variant="primary">
+                Submit
+              </Button>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    );
+  }
+}
+
+import React, { Component } from "react";
+import { Button, Form, FormText, Modal } from "react-bootstrap";
+
+export default class DeleteBookModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      book: props.book,
+      showModal: false,
+    };
+  }
+
+  handleInputChange = (e) => {
+    const { name, value } = e.target;
+    this.setState((prevState) => ({
+      book: { ...prevState.book, [name]: value },
+    }));
+  };
+
+  handleShowModal = () => {
+    this.setState({ showModal: true });
+  };
+
+  handleDeleteSubmit = (e) => {
+    e.preventDefault();
+    const { book } = this.state;
+    if (this.props.onDelete) {
+      this.props.onDelete(book);
+    }
+    this.handleCloseModal();
+  };
+
+  handleCloseModal = () => {
+    this.setState({
+      book: {
+        _id: "",
+        title: "",
+        description: "",
+        status: "",
+      },
+      showModal: false,
+    });
+  };
+
+  render() {
+        const { book } = this.state;
+
+    return (
+      <>
+        <Button
+          onClick={this.handleShowModal}
+          className="btn-lg mainButton"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))",
+          }}
+        >
+          Delete
+        </Button>
+        <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Delete Book</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={this.handleDeleteSubmit}>
+              <Form.Group controlId="_id">
+                <Form.Label>Book _id</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="_id"
+                  placeholder="Enter _id"
+                  value={book._id}
+                  onChange={this.handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group controlId="title">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  placeholder="Enter title"
+                  value={book.title}
+                />
+              </Form.Group>
+              <Form.Group controlId="description">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  name="description"
+                  rows={3}
+                  placeholder="Enter description"
+                  value={book.description}
+                />
+              </Form.Group>
+              <Form.Group controlId="status">
+                <Form.Label>Status</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="status"
+                  value={book.status}
+                  onChange={this.handleInputChange}
+                >
+                  <option value="">Select status</option>
+                  <option value="available">Available</option>
+                  <option value="unavailable">Unavailable</option>
+                </Form.Control>
+              </Form.Group>
+              <FormText className="text-muted">
+                All fields are required.
+              </FormText>
+              <Button type="submit" variant="primary">
+                Submit
+              </Button>
+            </Form>
+
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    );
+  }
+}
+
+// DeleteBookModal.propTypes = {
+//   show: PropTypes.bool.isRequired,
+//   onHide: PropTypes.func.isRequired,
+//   filteredBooks: PropTypes.array.isRequired,
+//   onDelete: PropTypes.func.isRequired,
+//   numDeletedBooks: PropTypes.number.isRequired,
+//   errorMessage: PropTypes.string,
+// };
+
+// DeleteBookModal.defaultProps = {
+//   errorMessage: "",
+// };

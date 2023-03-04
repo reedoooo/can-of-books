@@ -1,8 +1,4 @@
 import React from 'react';
-import { withAuth0 } from '@auth0/auth0-react';
-// install with `npm i @auth0/auth0-react`
-
-import LoginPage from './LoginPage';
 import Header from './Header';
 import Footer from './Footer';
 import BestBooks from './BestBooks';
@@ -13,16 +9,11 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-import LogInLogOut from './Auth/LogInLogOut';
 
 class App extends React.Component {
   render() {
     return (
       <>
-        <LogInLogOut />
-
-        {this.props.auth0.isAuthenticated ? 
-        
         <Router>
           <Header />
           <Routes>
@@ -31,12 +22,9 @@ class App extends React.Component {
           </Routes>
           <Footer />
         </Router>
-      
-        : null }
-
       </>
     );
   }
 }
 
-export default withAuth0(App);
+export default App;
